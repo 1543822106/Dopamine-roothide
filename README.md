@@ -13,3 +13,5 @@
 
 - or ref to [.github/workflows/roothide.yml](.github/workflows/main.yml) if you want to build it on macOS.
 
+
+<!-- ci kick 2026-10-27T19:07:26Z -->
