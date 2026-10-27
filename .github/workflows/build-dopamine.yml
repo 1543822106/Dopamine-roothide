@@ -1,0 +1,67 @@
+name: Build Dopamine-roothide
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-14 # 使用 macOS 14 (Xcode 15) 兼容性更好
+
+    steps:
+      - name: 1. 检出代码及子模块
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: 2. 安装越狱编译依赖工具
+        run: |
+          brew install ldid libarchive wget cmake
+
+      - name: 3. 自动寻找工程并编译
+        run: |
+          mkdir -p output_artifact
+          
+          # 寻找 Xcode 工程文件的真实路径
+          PROJ_PATH=$(find . -maxdepth 3 -name "*.xcodeproj" | head -n 1)
+          echo "检测到 Xcode 工程路径: $PROJ_PATH"
+          
+          # 提取出正确的 Scheme 名称 (即去掉路径和 .xcodeproj 后缀)
+          SCHEME_NAME=$(basename "$PROJ_PATH" .xcodeproj)
+          echo "检测到 Scheme 名称: $SCHEME_NAME"
+
+          # 先尝试使用 Makefile 编译完整越狱包（如果项目根目录有 Makefile）
+          if [ -f "Makefile" ]; then
+            echo "发现 Makefile，尝试执行完整编译..."
+            make NIGHTLY=1 || echo "Makefile 完整编译未通过，回退到纯 Xcode 编译..."
+          fi
+
+          # 检查 Makefile 是否已经生成了 ipa 或 tipa
+          EXISTING_PACKAGE=$(find . -maxdepth 2 \( -name "*.ipa" -o -name "*.tipa" \) | head -n 1)
+          
+          if [ -n "$EXISTING_PACKAGE" ]; then
+            echo "已通过 Makefile 成功生成安装包: $EXISTING_PACKAGE"
+            cp "$EXISTING_PACKAGE" output_artifact/
+          else
+            echo "开始执行 Xcode 免签名编译..."
+            xcodebuild clean build \
+              -project "$PROJ_PATH" \
+              -scheme "$SCHEME_NAME" \
+              -configuration Release \
+              -sdk iphoneos \
+              -derivedDataPath build_output \
+              CODE_SIGN_IDENTITY="" \
+              CODE_SIGNING_REQUIRED=NO \
+              CODE_SIGNING_ALLOWED=NO
+
+            mkdir -p Payload
+            APP_PATH=$(find build_output -name "*.app" -type d | head -n 1)
+            cp -r "$APP_PATH" Payload/
+            zip -r -q output_artifact/Dopamine_roothide_Unsigned.ipa Payload
+            cp output_artifact/Dopamine_roothide_Unsigned.ipa output_artifact/Dopamine_roothide.tipa
+          fi
+
+      - name: 4. 上传安装包 (IPA / TIPA)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Dopamine-roothide-Package
+          path: output_artifact/*
