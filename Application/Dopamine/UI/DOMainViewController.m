@@ -229,7 +229,7 @@
     jbOuter.translatesAutoresizingMaskIntoConstraints = NO;
     jbOuter.userInteractionEnabled = NO;
     jbOuter.backgroundColor = [UIColor colorWithRed:0.22 green:0.52 blue:0.80 alpha:0.14];
-    jbOuter.layer.cornerRadius = 32;
+    jbOuter.layer.cornerRadius = 26;
     jbOuter.layer.cornerCurve = kCACornerCurveContinuous;
     jbOuter.layer.borderWidth = 1.0;
     jbOuter.layer.borderColor = [UIColor colorWithRed:0.80 green:0.95 blue:1.0 alpha:0.42].CGColor;

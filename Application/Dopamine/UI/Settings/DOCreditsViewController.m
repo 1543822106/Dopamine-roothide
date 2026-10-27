@@ -28,7 +28,7 @@
         _specifiers = [self loadSpecifiersFromPlistName:@"Credits" target:self];
 
         PSSpecifier *headerSpecifier = _specifiers[0];
-        [headerSpecifier setProperty:[NSString stringWithFormat:@"Dopamine %@ RootHide", [DOEnvironmentManager sharedManager].appVersionDisplayString] forKey:@"title"];
+        [headerSpecifier setProperty:[NSString stringWithFormat:@"Dopamine %@ RootHide", [DOEnvironmentManager sharedManager].appVersion] forKey:@"title"];
     }
     return _specifiers;
 }
