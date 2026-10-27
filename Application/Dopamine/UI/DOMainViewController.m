@@ -96,8 +96,9 @@
     }
 
     //Header
+    NSString *_shortVer = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] ?: @"";
     DOHeaderView *headerView = [[DOHeaderView alloc] initWithImage: [UIImage imageNamed:@"Dopamine"] subtitles: @[
-        [DOGlobalAppearance mainSubtitleString:@"iOS 16 专用"],
+        [DOGlobalAppearance mainSubtitleString:[NSString stringWithFormat:@"Version %@", _shortVer]],
     ]];
     self.headerView = headerView;
     [self updateUptimeLabel];
@@ -117,19 +118,29 @@
             [self.navigationController pushViewController:[[DOSettingsController alloc] init] animated:YES];
         }],
         [UIAction actionWithTitle:@"重启桌面总控" image:[UIImage systemImageNamed:@"arrow.clockwise" withConfiguration:[DOGlobalAppearance smallIconImageConfiguration]] identifier:@"respring" handler:^(__kindof UIAction * _Nonnull action) {
-            [self fadeToBlack:^{
-                [[DOEnvironmentManager sharedManager] respring];
-            }];
+            UIAlertController *confirmation = [UIAlertController alertControllerWithTitle:@"是否要重启桌面" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            [confirmation addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+            [confirmation addAction:[UIAlertAction actionWithTitle:@"重启" style:UIAlertActionStyleDestructive handler:^(__kindof UIAlertAction * _Nonnull alertAction) {
+                [self fadeToBlack:^{
+                    [[DOEnvironmentManager sharedManager] respring];
+                }];
+            }]];
+            [self presentViewController:confirmation animated:YES completion:nil];
         }],
         [UIAction actionWithTitle:@"重启用户空间" image:[UIImage systemImageNamed:@"arrow.clockwise.circle" withConfiguration:[DOGlobalAppearance smallIconImageConfiguration]] identifier:@"reboot-userspace" handler:^(__kindof UIAction * _Nonnull action) {
-            [self fadeToBlack:^{
-                [[DOEnvironmentManager sharedManager] rebootUserspace];
-            }];
+            UIAlertController *confirmation = [UIAlertController alertControllerWithTitle:@"是否要重启用户空间" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            [confirmation addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+            [confirmation addAction:[UIAlertAction actionWithTitle:@"重启" style:UIAlertActionStyleDestructive handler:^(__kindof UIAlertAction * _Nonnull alertAction) {
+                [self fadeToBlack:^{
+                    [[DOEnvironmentManager sharedManager] rebootUserspace];
+                }];
+            }]];
+            [self presentViewController:confirmation animated:YES completion:nil];
         }],
         [UIAction actionWithTitle:@"重启本机设备" image:[UIImage systemImageNamed:@"power" withConfiguration:[DOGlobalAppearance smallIconImageConfiguration]] identifier:@"reboot-device" handler:^(__kindof UIAction * _Nonnull action) {
-            UIAlertController *confirmation = [UIAlertController alertControllerWithTitle:DOLocalizedString(@"Menu_Reboot_Device_Title") message:DOLocalizedString(@"Alert_Reboot_Device_Body") preferredStyle:UIAlertControllerStyleAlert];
-            [confirmation addAction:[UIAlertAction actionWithTitle:DOLocalizedString(@"Button_Cancel") style:UIAlertActionStyleCancel handler:nil]];
-            [confirmation addAction:[UIAlertAction actionWithTitle:DOLocalizedString(@"Button_Reboot") style:UIAlertActionStyleDestructive handler:^(__kindof UIAlertAction * _Nonnull alertAction) {
+            UIAlertController *confirmation = [UIAlertController alertControllerWithTitle:@"是否要重启设备" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            [confirmation addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil]];
+            [confirmation addAction:[UIAlertAction actionWithTitle:@"重启" style:UIAlertActionStyleDestructive handler:^(__kindof UIAlertAction * _Nonnull alertAction) {
                 if ([[DOEnvironmentManager sharedManager] isJailbroken]) {
                     [self fadeToBlack:^{
                         [[DOEnvironmentManager sharedManager] reboot];
@@ -164,7 +175,8 @@
     [buttonPlaceHolder setTranslatesAutoresizingMaskIntoConstraints:NO];
     [stackView addArrangedSubview:buttonPlaceHolder];
     [NSLayoutConstraint activateConstraints:@[
-        [buttonPlaceHolder.heightAnchor constraintEqualToConstant:88]
+        // 跟顶部 header 大/小框之间 32pt 内缩一致：按钮 52 + 上下各 32 = 116
+        [buttonPlaceHolder.heightAnchor constraintEqualToConstant:116]
     ]];
     
     //Jailbreak Button
@@ -217,7 +229,7 @@
     jbOuter.translatesAutoresizingMaskIntoConstraints = NO;
     jbOuter.userInteractionEnabled = NO;
     jbOuter.backgroundColor = [UIColor colorWithRed:0.22 green:0.52 blue:0.80 alpha:0.14];
-    jbOuter.layer.cornerRadius = 28;
+    jbOuter.layer.cornerRadius = 32;
     jbOuter.layer.cornerCurve = kCACornerCurveContinuous;
     jbOuter.layer.borderWidth = 1.0;
     jbOuter.layer.borderColor = [UIColor colorWithRed:0.80 green:0.95 blue:1.0 alpha:0.42].CGColor;
