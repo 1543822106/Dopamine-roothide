@@ -18,10 +18,14 @@
     {
         [self setDelegate:delegate];
         [self setActions:actions];
-        self.backgroundColor = [DOThemeManager menuColorWithAlpha:1.0];
-        self.layer.cornerRadius = 14;
+        self.backgroundColor = [UIColor colorWithRed:0.22 green:0.52 blue:0.80 alpha:0.14];
+        self.layer.cornerRadius = 28;
         self.layer.masksToBounds = YES;
         self.layer.cornerCurve = kCACornerCurveContinuous;
+        self.layer.borderWidth = 1.15;
+        self.layer.borderColor = [UIColor colorWithRed:0.80 green:0.95 blue:1.0 alpha:0.42].CGColor;
+
+        // 去掉 UltraThinMaterialDark 模糊层：它把大框压成了深黑。改用纯色半透明，与顶部两框同风格。
     }
     return self;
 }
@@ -39,6 +43,7 @@
     [self.buttonsView removeFromSuperview];
     self.buttonsView = [[UIStackView alloc] init];
     self.buttonsView.axis = UILayoutConstraintAxisVertical;
+    self.buttonsView.spacing = 0;
     self.buttonsView.translatesAutoresizingMaskIntoConstraints = NO;
 
     int button_height = [DOGlobalAppearance isHomeButtonDevice] ? UI_ACTION_HEIGHT_HOME_BTN : UI_ACTION_HEIGHT;
@@ -48,7 +53,8 @@
     [self.actions enumerateObjectsUsingBlock:^(UIAction *action, NSUInteger idx, BOOL *stop) {
         DOActionMenuButton *button = [DOActionMenuButton buttonWithAction:action chevron:[self.delegate actionMenuShowsChevronForAction:action]];
         button.enabled = [self.delegate actionMenuActionIsEnabled:action];
-        [button setBottomSeparator:idx != self.actions.count - 1];
+        [button addInnerCard];               // 每项套独立小框（越狱按钮不会调这个，故不会多套一层）
+        [button setBottomSeparator:NO];      // 有小框就不要分隔线
         [self.buttonsView addArrangedSubview:button];
         [NSLayoutConstraint activateConstraints:@[
             [button.heightAnchor constraintEqualToConstant:button_height],
