@@ -47,7 +47,10 @@
 
 - (UIImage *)generateBootLogo
 {
-    UIImage *backgroundImage = [self image];
+    // Bootlogo wallpaper is independent of the theme image so switching
+    // theme doesn't change the boot screen, and so a brighter wallpaper
+    // doesn't wash out the in-app UI text that uses the theme image.
+    UIImage *backgroundImage = [UIImage imageNamed:@"BootLogo_Wallpaper"] ?: [self image];
     CGSize canvasSize = backgroundImage.size;
 
     UIImage *overlayImage = [UIImage imageNamed:@"DopamineLogo"];

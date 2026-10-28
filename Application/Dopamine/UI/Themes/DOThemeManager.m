@@ -68,10 +68,12 @@
 
 - (DOTheme*)enabledTheme
 {
+    // Default theme is "blue" (Deep Blue Sky). Fall back to the first theme
+    // only if "blue" somehow isn't registered.
     id value = [[DOPreferenceManager sharedManager] preferenceValueForKey:@"theme"];
     if (!value)
-        return self.themes.firstObject;
-    return [self getThemeForKey:value] ?: self.themes.firstObject;
+        return [self getThemeForKey:@"blue"] ?: self.themes.firstObject;
+    return [self getThemeForKey:value] ?: [self getThemeForKey:@"blue"] ?: self.themes.firstObject;
 }
 
 
