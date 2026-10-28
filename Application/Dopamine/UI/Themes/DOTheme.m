@@ -47,29 +47,9 @@
 
 - (UIImage *)generateBootLogo
 {
-    // Bootlogo wallpaper is independent of the theme image so switching
-    // theme doesn't change the boot screen, and so a brighter wallpaper
-    // doesn't wash out the in-app UI text that uses the theme image.
+    // Bootlogo is just the wallpaper -- no Dopamine logo overlay.
     UIImage *backgroundImage = [UIImage imageNamed:@"BootLogo_Wallpaper"] ?: [self image];
-    CGSize canvasSize = backgroundImage.size;
-
-    UIImage *overlayImage = [UIImage imageNamed:@"DopamineLogo"];
-
-    CGSize overlaySize = CGSizeMake(350, 350);
-    CGPoint overlayOrigin = CGPointMake((canvasSize.width - overlaySize.width) / 2.0,
-                                        (canvasSize.height - overlaySize.height) / 2.0);
-
-    UIGraphicsBeginImageContextWithOptions(canvasSize, NO, backgroundImage.scale);
-
-    [backgroundImage drawInRect:CGRectMake(0, 0, canvasSize.width, canvasSize.height)];
-
-    // Render overlay (Dopamine Logo) in center of background for boot logo
-    [overlayImage drawInRect:CGRectMake(overlayOrigin.x, overlayOrigin.y, overlaySize.width, overlaySize.height)];
-
-    UIImage *finalImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-
-    return finalImage;
+    return backgroundImage;
 }
 
 @end

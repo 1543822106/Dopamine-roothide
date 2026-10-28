@@ -4,6 +4,24 @@
 <array>
 	<dict>
 		<key>key</key>
+		<string>blue</string>
+		<key>icon</key>
+		<string>AppIcon_Blue</string>
+		<key>name</key>
+		<string>Deep Blue Sky</string>
+		<key>image</key>
+		<string>Background_Blue.jpg</string>
+		<key>actionMenuColor</key>
+		<string>3F0C2571</string>
+		<key>windowColor</key>
+		<string>6004050A</string>
+		<key>blur</key>
+		<integer>40</integer>
+		<key>titleShadow</key>
+		<false/>
+	</dict>
+	<dict>
+		<key>key</key>
 		<string>default</string>
 		<key>name</key>
 		<string>Dopamine</string>
@@ -35,24 +53,6 @@
 		<integer>18</integer>
 		<key>titleShadow</key>
 		<true/>
-	</dict>
-	<dict>
-		<key>key</key>
-		<string>blue</string>
-		<key>icon</key>
-		<string>AppIcon_Blue</string>
-		<key>name</key>
-		<string>Deep Blue Sky</string>
-		<key>image</key>
-		<string>Background_Blue.jpg</string>
-		<key>actionMenuColor</key>
-		<string>3F0C2571</string>
-		<key>windowColor</key>
-		<string>6004050A</string>
-		<key>blur</key>
-		<integer>40</integer>
-		<key>titleShadow</key>
-		<false/>
 	</dict>
 	<dict>
 		<key>key</key>

@@ -6,6 +6,8 @@
 //
 
 #import "DOAppDelegate.h"
+#import "DOThemeManager.h"
+#import "DOTheme.h"
 
 @interface DOAppDelegate ()
 
@@ -15,7 +17,17 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    // Sync the home-screen icon to the enabled theme on every launch, so a
+    // brand-new install (where the default theme is Deep Blue Sky) shows the
+    // blue AppIcon_Blue instead of the stock green AppIcon.
+    DOTheme *theme = [[DOThemeManager sharedInstance] enabledTheme];
+    NSString *desiredIcon = theme.icon.length ? theme.icon : nil;
+    NSString *currentIcon = application.alternateIconName;
+    BOOL same = (currentIcon == nil && desiredIcon == nil)
+                || (currentIcon != nil && desiredIcon != nil && [currentIcon isEqualToString:desiredIcon]);
+    if (!same && [application supportsAlternateIcons]) {
+        [application setAlternateIconName:desiredIcon completionHandler:nil];
+    }
     return YES;
 }
 
