@@ -5,8 +5,6 @@
 	<dict>
 		<key>key</key>
 		<string>blue</string>
-		<key>icon</key>
-		<string>AppIcon_Blue</string>
 		<key>name</key>
 		<string>Deep Blue Sky</string>
 		<key>image</key>
@@ -23,6 +21,8 @@
 	<dict>
 		<key>key</key>
 		<string>default</string>
+		<key>icon</key>
+		<string>AppIcon_Dopamine</string>
 		<key>name</key>
 		<string>Dopamine</string>
 		<key>image</key>
