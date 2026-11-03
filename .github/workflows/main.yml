@@ -19,7 +19,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: macos-14
+    runs-on: macos-26
     steps:
       - name: Xcode Setup
         uses: maxim-lobanov/setup-xcode@v1
