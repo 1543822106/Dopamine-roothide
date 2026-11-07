@@ -29,7 +29,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@main
         with:
-            repository: roothide/Dopamine-roothide
+            # 不写 repository：默认编触发这次 run 的仓库 + commit（写死 upstream 会把我们的改动全丢掉）
             submodules: recursive
 
       - name: Install Procursus

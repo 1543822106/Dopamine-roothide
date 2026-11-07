@@ -32,13 +32,14 @@
         button.layer.masksToBounds = YES;
         button.layer.cornerCurve = kCACornerCurveContinuous;
         button.layer.borderWidth = 1;
-        button.layer.borderColor = [UIColor colorWithWhite:1 alpha:0.15].CGColor;
+        button.backgroundColor = [UIColor colorWithRed:0.22 green:0.52 blue:0.80 alpha:0.18];
+        button.layer.borderColor = [UIColor colorWithRed:0.78 green:0.94 blue:1.0 alpha:0.42].CGColor;
 
         [self.contentView addSubview:button];
 
         [NSLayoutConstraint activateConstraints:@[
-            [button.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:20],
-            [button.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-20],
+            [button.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:12],
+            [button.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-12],
             [button.topAnchor constraintEqualToAnchor:self.topAnchor constant:4],
             [button.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-4],
         ]];

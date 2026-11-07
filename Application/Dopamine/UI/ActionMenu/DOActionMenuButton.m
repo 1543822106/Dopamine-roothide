@@ -22,10 +22,8 @@
 {
     DOActionMenuButton *button = [DOActionMenuButton buttonWithConfiguration:[DOGlobalAppearance defaultButtonConfiguration] primaryAction:action];
     [button.titleLabel setAdjustsFontSizeToFitWidth:YES];
-    [button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
-
-    if ([DOGlobalAppearance isRTL])
-        [button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentRight];
+    // 标题居中（原来是靠左）；图标跟标题一起居中
+    [button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentCenter];
 
     if (chevron)
     {
@@ -33,10 +31,10 @@
         chevronImage = [chevronImage imageWithConfiguration:[UIImageSymbolConfiguration configurationWithPointSize:16 weight:UIImageSymbolWeightRegular]];
         UIImageView *chevronView = [[UIImageView alloc] initWithImage:chevronImage];
         chevronView.translatesAutoresizingMaskIntoConstraints = NO;
-        chevronView.tintColor = [UIColor colorWithWhite:1 alpha:0.6];
+        chevronView.tintColor = [UIColor colorWithRed:0.46 green:1.0 blue:0.88 alpha:0.72];
         [button addSubview:chevronView];
         [NSLayoutConstraint activateConstraints:@[
-            [chevronView.trailingAnchor constraintEqualToAnchor:button.trailingAnchor constant:-10],
+            [chevronView.trailingAnchor constraintEqualToAnchor:button.trailingAnchor constant:-22],
             [chevronView.centerYAnchor constraintEqualToAnchor:button.centerYAnchor],
         ]];
     }
@@ -47,6 +45,26 @@
     return button;
 }
 
+-(void)addInnerCard
+{
+    // 菜单项小框：横向内缩 12（比大框短一圈），上下内缩 4；提亮的通透蓝 + 淡青描边。
+    UIView *cardView = [[UIView alloc] init];
+    cardView.translatesAutoresizingMaskIntoConstraints = NO;
+    cardView.userInteractionEnabled = NO;
+    cardView.backgroundColor = [UIColor colorWithRed:0.30 green:0.62 blue:0.92 alpha:0.28];
+    cardView.layer.cornerRadius = 16;
+    cardView.layer.cornerCurve = kCACornerCurveContinuous;
+    cardView.layer.borderWidth = 1.0;
+    cardView.layer.borderColor = [UIColor colorWithRed:0.78 green:0.95 blue:1.0 alpha:0.45].CGColor;
+    [self insertSubview:cardView atIndex:0];
+    [NSLayoutConstraint activateConstraints:@[
+        [cardView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:12],
+        [cardView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-12],
+        [cardView.topAnchor constraintEqualToAnchor:self.topAnchor constant:6],
+        [cardView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-6],
+    ]];
+}
+
 -(void)buttonPressed
 {
     [self.feedbackGenerator impactOccurred];
@@ -55,21 +73,20 @@
 -(void)setBottomSeparator:(BOOL)bottomSeparator
 {
     _bottomSeparator = bottomSeparator;
-    if (_separator)
-        [_separator removeFromSuperview];
+    [_separator removeFromSuperview];
+    _separator = nil;
+
     if (bottomSeparator)
     {
         _separator = [[UIView alloc] init];
-        _separator.backgroundColor = [UIColor colorWithWhite:0.6 alpha:0.3];
+        _separator.backgroundColor = [UIColor colorWithRed:0.55 green:0.84 blue:1.0 alpha:0.14];
         _separator.translatesAutoresizingMaskIntoConstraints = NO;
-        _separator.layer.cornerRadius = 0.5;
-        _separator.layer.masksToBounds = YES;
         [self addSubview:_separator];
         [NSLayoutConstraint activateConstraints:@[
-            [_separator.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:10],
-            [_separator.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-10],
+            [_separator.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:12],
+            [_separator.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-12],
             [_separator.bottomAnchor constraintEqualToAnchor:self.bottomAnchor],
-            [_separator.heightAnchor constraintEqualToConstant:1],
+            [_separator.heightAnchor constraintEqualToConstant:0.5],
         ]];
     }
 }
